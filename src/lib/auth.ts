@@ -5,7 +5,7 @@ import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { nextCookies } from "better-auth/next-js"
 import { apiKey } from "better-auth/plugins"
-import { nextCookies } from "better-auth/next-js"
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -44,9 +44,4 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
-})
-export const getSession = cache(async () => {
-  return await auth.api.getSession({
-    headers: await headers(),
-  })
 })

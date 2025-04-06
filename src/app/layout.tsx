@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next"
 import { env } from "@/env.js"
-import { ClerkProvider } from "@clerk/nextjs"
 
 import "@/styles/globals.css"
 
@@ -72,30 +71,28 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            GeistSans.variable,
-            GeistMono.variable,
-            fontHeading.variable
-          )}
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          GeistSans.variable,
+          GeistMono.variable,
+          fontHeading.variable
+        )}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <TailwindIndicator />
-            <Analytics />
-          </ThemeProvider>
-          <Toaster />
-        </body>
-      </html>
-    </ClerkProvider>
+          {children}
+          <TailwindIndicator />
+          <Analytics />
+        </ThemeProvider>
+        <Toaster />
+      </body>
+    </html>
   )
 }

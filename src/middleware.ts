@@ -1,18 +1,18 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
+import { NextRequest, NextResponse } from "next/server"
+import { getSessionCookie } from "better-auth/cookies"
 
-const isProtectedRoute = createRouteMatcher(["/dashboard(.*)"])
-
-export default clerkMiddleware((auth, req) => {
-  if (isProtectedRoute(req)) {
-    const url = new URL(req.nextUrl.origin)
-
-    auth().protect({
-      unauthenticatedUrl: `${url.origin}/signin`,
-      unauthorizedUrl: `${url.origin}/dashboard/stores`,
-    })
+export async function middleware(request: NextRequest) {
+  const sessionCookie = getSessionCookie(request)
+  const { pathname } = request.nextUrl
+  if (sessionCookie && ["/login", "/signup"].includes(pathname)) {
+    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
-})
+  if (!sessionCookie && pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/login", request.url))
+  }
+  return NextResponse.next()
+}
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/dashboard", "/login", "/signup"],
 }
