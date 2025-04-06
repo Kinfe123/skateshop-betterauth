@@ -1,4 +1,4 @@
-import headers from "next/headers"
+import { headers } from "next/headers"
 
 import { auth } from "@/lib/auth"
 import { SiteFooter } from "@/components/layouts/site-footer"

@@ -1,5 +1,5 @@
 {
-  "name": "skateshop",
+  "name": "skateshop-better-auth",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -64,7 +64,7 @@
     "@upstash/ratelimit": "^1.2.1",
     "@upstash/redis": "^1.32.0",
     "ai": "^3.2.22",
-    "better-auth": "^1.2.5",
+    "better-auth": "1.2.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -107,7 +107,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@clerk/types": "^4.6.1",
     "@faker-js/faker": "^8.4.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@tailwindcss/typography": "^0.5.13",

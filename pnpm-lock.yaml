@@ -120,7 +120,7 @@ importers:
         specifier: ^3.2.22
         version: 3.2.22(openai@4.52.7)(react@19.0.0)(svelte@4.2.18)(vue@3.4.31(typescript@5.5.3))(zod@3.23.8)
       better-auth:
-        specifier: ^1.2.5
+        specifier: 1.2.5
         version: 1.2.5(typescript@5.5.3)
       class-variance-authority:
         specifier: ^0.7.0
@@ -243,9 +243,6 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
-      '@clerk/types':
-        specifier: ^4.6.1
-        version: 4.6.1
       '@faker-js/faker':
         specifier: ^8.4.1
         version: 8.4.1
