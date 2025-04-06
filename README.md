@@ -13,7 +13,7 @@ This is an open source e-commerce skateshop build with everything new in Next.js
 
 - **Framework:** [Next.js](https://nextjs.org)
 - **Styling:** [Tailwind CSS](https://tailwindcss.com)
-- **User Management:** [Clerk](https://clerk.com)
+- **Auth & User Management:** [Clerk](https://better-auth.com)
 - **ORM:** [Drizzle ORM](https://orm.drizzle.team)
 - **UI Components:** [shadcn/ui](https://ui.shadcn.com)
 - **Email:** [React Email](https://react.email)
@@ -23,7 +23,7 @@ This is an open source e-commerce skateshop build with everything new in Next.js
 
 ## Features to be implemented
 
-- [x] Authentication with **Clerk**
+- [x] Authentication with **BetterAuth**
 - [x] File uploads with **uploadthing**
 - [x] Newsletter subscription with **React Email** and **Resend**
 - [x] Blog using **MDX** and **Contentlayer**
