@@ -6,8 +6,8 @@ import { useSignIn } from "@clerk/nextjs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
-
-import { authClient, authClient } from "@/lib/auth-client"
+import { toast } from "sonner"
+import {  authClient } from "@/lib/auth-client"
 import { showErrorToast } from "@/lib/handle-error"
 import { authSchema } from "@/lib/validations/auth"
 import { Button } from "@/components/ui/button"
@@ -30,7 +30,7 @@ export function SignInForm() {
   const router = useRouter()
   const { isLoaded, signIn, setActive } = useSignIn()
   const [loading, setLoading] = React.useState(false)
-
+  const [error , setError] = React.useState("")
   // react-hook-form
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchema),
@@ -74,6 +74,9 @@ export function SignInForm() {
           onSuccess: (ctx) => {
             // redirect to the dashboard
             //alert("Logged in successfully");
+            toast.message("Check your email", {
+                          description: "We sent you a 6-digit verification code.",
+                        })
           },
           onError: (ctx) => {
             // display the error message
@@ -82,19 +85,6 @@ export function SignInForm() {
           },
         }
       )
-      const result = await signIn.create({
-        identifier: data.email,
-        password: data.password,
-      })
-
-      if (result.status === "complete") {
-        await setActive({ session: result.createdSessionId })
-
-        router.push(`${window.location.origin}/`)
-      } else {
-        /*Investigate why the login hasn't completed */
-        console.log(result)
-      }
     } catch (err) {
       showErrorToast(err)
     } finally {
