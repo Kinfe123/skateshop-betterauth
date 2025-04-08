@@ -23,9 +23,8 @@ interface PageProps {
   }
 }
 
-async function getPageFromParams(params: Promise<PageProps["params"]>) {
-  const awaitedParams = await params
-  const slug = awaitedParams.slug?.join("/") ?? ""
+async function getPageFromParams(params: PageProps["params"]) {
+  const slug = params.slug?.join("/") ?? ""
   const page = allPages.find(
     (page: { slugAsParams: string }) => page.slugAsParams === slug
   )
@@ -37,8 +36,13 @@ async function getPageFromParams(params: Promise<PageProps["params"]>) {
   return page
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const page = getPageFromParams(params)
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>
+}): Metadata {
+  const awaitedParams = await params
+  const page = getPageFromParams(awaitedParams)
 
   if (!page) {
     return {}
@@ -83,8 +87,13 @@ export function generateStaticParams(): PageProps["params"][] {
   }))
 }
 
-export default function Page({ params }: PageProps) {
-  const page = getPageFromParams(params)
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>
+}) {
+  const awaitedParams = await params
+  const page = getPageFromParams(awaitedParams)
 
   if (!page) {
     notFound()
