@@ -31,7 +31,7 @@ export const auth = betterAuth({
   rateLimit: {
     enabled: true,
   },
-  plugins: [nextCookies(), apiKey()],
+  plugins: [apiKey(), nextCookies()],
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID!,

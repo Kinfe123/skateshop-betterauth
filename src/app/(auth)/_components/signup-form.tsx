@@ -40,6 +40,7 @@ export function SignUpForm() {
 
   async function onSubmit(data: Inputs) {
     const { email, password } = data
+    console.log({ email, password })
     setLoading(true)
 
     try {
