@@ -1,7 +1,9 @@
 import { type Metadata } from "next"
+import { headers } from "next/headers"
 import Link from "next/link"
 import { env } from "@/env.js"
 
+import { auth } from "@/lib/auth"
 import {
   Card,
   CardContent,
@@ -20,7 +22,10 @@ export const metadata: Metadata = {
   description: "Sign up for an account",
 }
 
-export default function SignUpPage() {
+export default async function SignUpPage() {
+  const result = await auth.api.getSession({
+    headers: await headers(),
+  })
   return (
     <Shell className="max-w-lg">
       <Card>

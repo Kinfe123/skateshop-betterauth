@@ -2,12 +2,12 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { useSignUp } from "@clerk/nextjs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import type { z } from "zod"
 
+import { authClient } from "@/lib/auth-client"
 import { showErrorToast } from "@/lib/handle-error"
 import { authSchema } from "@/lib/validations/auth"
 import { Button } from "@/components/ui/button"
@@ -27,9 +27,8 @@ type Inputs = z.infer<typeof authSchema>
 
 export function SignUpForm() {
   const router = useRouter()
-  const { isLoaded, signUp } = useSignUp()
   const [loading, setLoading] = React.useState(false)
-
+  const [error, setError] = useState("")
   // react-hook-form
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchema),
@@ -40,22 +39,41 @@ export function SignUpForm() {
   })
 
   async function onSubmit(data: Inputs) {
-    if (!isLoaded) return
-
+    const { email, password } = data
     setLoading(true)
 
     try {
-      await signUp.create({
-        emailAddress: data.email,
-        password: data.password,
-      })
-
-      // Send email verification code
-      await signUp.prepareEmailAddressVerification({
-        strategy: "email_code",
-      })
-
-      router.push("/signup/verify-email")
+      const { data, error } = await authClient.signUp.email(
+        {
+          /**
+           * The user email
+           */
+          email,
+          /**
+           * The user password
+           */
+          password,
+          /**
+           * remember the user session after the browser is closed.
+           * @default true
+           */
+          name: "N/A",
+        },
+        {
+          onRequest: (ctx) => {
+            setLoading(true)
+          },
+          onSuccess: (ctx) => {
+            // redirect to the dashboard
+            //alert("Logged in successfully");
+            router.push("/login")
+          },
+          onError: (ctx) => {
+            setError(ctx.error.message as string)
+            setLoading(false)
+          },
+        }
+      )
       toast.message("Check your email", {
         description: "We sent you a 6-digit verification code.",
       })
