@@ -42,7 +42,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string[] }>
 }): Metadata {
   const awaitedParams = await params
-  const page = getPageFromParams(awaitedParams)
+  const page = await getPageFromParams(awaitedParams)
 
   if (!page) {
     return {}
@@ -93,7 +93,7 @@ export default async function Page({
   params: Promise<{ slug: string[] }>
 }) {
   const awaitedParams = await params
-  const page = getPageFromParams(awaitedParams)
+  const page = await getPageFromParams(awaitedParams)
 
   if (!page) {
     notFound()
