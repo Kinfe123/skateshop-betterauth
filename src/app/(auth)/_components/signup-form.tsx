@@ -28,7 +28,7 @@ type Inputs = z.infer<typeof authSchema>
 export function SignUpForm() {
   const router = useRouter()
   const [loading, setLoading] = React.useState(false)
-  const [error, setError] = useState("")
+  const [error, setError] = React.useState("")
   // react-hook-form
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchema),
@@ -64,8 +64,9 @@ export function SignUpForm() {
             setLoading(true)
           },
           onSuccess: (ctx) => {
-            // redirect to the dashboard
-            //alert("Logged in successfully");
+            toast.message("Check your email", {
+              description: "We sent you a 6-digit verification code.",
+            })
             router.push("/login")
           },
           onError: (ctx) => {
@@ -74,9 +75,6 @@ export function SignUpForm() {
           },
         }
       )
-      toast.message("Check your email", {
-        description: "We sent you a 6-digit verification code.",
-      })
     } catch (err) {
       showErrorToast(err)
     } finally {

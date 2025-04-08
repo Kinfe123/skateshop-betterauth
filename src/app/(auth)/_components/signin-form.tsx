@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
 
+import { authClient, authClient } from "@/lib/auth-client"
 import { showErrorToast } from "@/lib/handle-error"
 import { authSchema } from "@/lib/validations/auth"
 import { Button } from "@/components/ui/button"
@@ -21,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/icons"
 import { PasswordInput } from "@/components/password-input"
+import { authClient } from "@/lib/auth-client"
 
 type Inputs = z.infer<typeof authSchema>
 
@@ -39,11 +41,47 @@ export function SignInForm() {
   })
 
   async function onSubmit(data: Inputs) {
+    const { email, password } = data
     if (!isLoaded) return
 
     setLoading(true)
 
     try {
+      const { data, error } = await authClient.signIn.email(
+        {
+          /**
+           * The user email
+           */
+          email,
+          /**
+           * The user password
+           */
+          password,
+          /**
+           * a url to redirect to after the user verifies their email (optional)
+           */
+          callbackURL: "/dashboard",
+          /**
+           * remember the user session after the browser is closed.
+           * @default true
+           */
+          rememberMe: false,
+        },
+        {
+          onRequest: (ctx) => {
+            setLoading(true)
+          },
+          onSuccess: (ctx) => {
+            // redirect to the dashboard
+            //alert("Logged in successfully");
+          },
+          onError: (ctx) => {
+            // display the error message
+            setError(ctx.error.message)
+            setLoading(false)
+          },
+        }
+      )
       const result = await signIn.create({
         identifier: data.email,
         password: data.password,
