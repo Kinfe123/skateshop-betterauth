@@ -1,5 +1,7 @@
+import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
+import { auth } from "@/lib/auth"
 import { getStoresByUserId } from "@/lib/queries/store"
 import { getCachedUser, getUserPlanMetrics } from "@/lib/queries/user"
 
@@ -12,14 +14,14 @@ import { StoreSwitcher } from "../store/[storeId]/_components/store-switcher"
 export default async function DashboardLayout({
   children,
 }: React.PropsWithChildren) {
-  const user = await getCachedUser()
-
+  const user = await auth.api.getSession({
+    headers: await headers(),
+  })
   if (!user) {
     redirect("/signin")
   }
-
-  const storesPromise = getStoresByUserId({ userId: user.id })
-  const planMetricsPromise = getUserPlanMetrics({ userId: user.id })
+  const storesPromise = getStoresByUserId({ userId: user.user.id })
+  const planMetricsPromise = getUserPlanMetrics({ userId: user.user.id })
 
   return (
     <SidebarProvider>

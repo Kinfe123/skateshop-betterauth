@@ -23,8 +23,9 @@ interface PageProps {
   }
 }
 
-function getPageFromParams(params: PageProps["params"]) {
-  const slug = params?.slug?.join("/") ?? ""
+async function getPageFromParams(params: Promise<PageProps["params"]>) {
+  const awaitedParams = await params
+  const slug = awaitedParams.slug?.join("/") ?? ""
   const page = allPages.find(
     (page: { slugAsParams: string }) => page.slugAsParams === slug
   )

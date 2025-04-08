@@ -20,7 +20,8 @@ export async function getCart(input?: {
 }): Promise<CartLineItemSchema[]> {
   noStore()
 
-  const cartId = cookies().get("cartId")?.value
+  const awaitedCookies = await cookies()
+  const cartId = awaitedCookies.get("cartId")?.value
 
   if (!cartId) return []
 
@@ -85,8 +86,8 @@ export async function getCart(input?: {
 
 export async function getUniqueStoreIds() {
   noStore()
-
-  const cartId = cookies().get("cartId")?.value
+  const awaitedCookies = await cookies()
+  const cartId = awaitedCookies.get("cartId")?.value
 
   if (!cartId) return []
 
