@@ -70,7 +70,7 @@ export function SignUpForm() {
             router.push("/login")
           },
           onError: (ctx) => {
-            setError(ctx.error.message as string)
+            setError(ctx.error.message)
             setLoading(false)
           },
         }

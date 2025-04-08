@@ -1,8 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { useSignIn } from "@clerk/nextjs"
-import { type OAuthStrategy } from "@clerk/types"
+
+// import { useSignIn } from "@clerk/nextjs"
+// import { type OAuthStrategy } from "@clerk/types"
 
 import { showErrorToast } from "@/lib/handle-error"
 import { Button } from "@/components/ui/button"
@@ -14,23 +15,23 @@ const oauthProviders = [
 ] satisfies {
   name: string
   icon: keyof typeof Icons
-  strategy: OAuthStrategy
+  // strategy: OAuthStrategy
 }[]
 
 export function OAuthSignIn() {
-  const [loading, setLoading] = React.useState<OAuthStrategy | null>(null)
-  const { signIn, isLoaded: signInLoaded } = useSignIn()
+  const [loading, setLoading] = React.useState<string | null>(null)
+  // const { signIn, isLoaded: signInLoaded } = useSignIn()
 
-  async function oauthSignIn(provider: OAuthStrategy) {
-    if (!signInLoaded) return null
+  async function oauthSignIn(provider: string) {
+    // if (!signInLoaded) return null
 
     try {
       setLoading(provider)
-      await signIn.authenticateWithRedirect({
-        strategy: provider,
-        redirectUrl: "/sso-callback",
-        redirectUrlComplete: "/",
-      })
+      // await signIn.authenticateWithRedirect({
+      //   strategy: provider,
+      //   redirectUrl: "/sso-callback",
+      //   redirectUrlComplete: "/",
+      // })
     } catch (err) {
       setLoading(null)
       showErrorToast(err)

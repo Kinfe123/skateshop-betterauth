@@ -2,10 +2,8 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { useSignIn } from "@clerk/nextjs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import type { z } from "zod"
 
 import { showErrorToast } from "@/lib/handle-error"
@@ -26,7 +24,6 @@ type Inputs = z.infer<typeof checkEmailSchema>
 
 export function ResetPasswordForm() {
   const router = useRouter()
-  const { isLoaded, signIn } = useSignIn()
   const [loading, setLoading] = React.useState(false)
 
   // react-hook-form
@@ -38,22 +35,17 @@ export function ResetPasswordForm() {
   })
 
   async function onSubmit(data: Inputs) {
-    if (!isLoaded) return
-
-    setLoading(true)
-
     try {
-      const firstFactor = await signIn.create({
-        strategy: "reset_password_email_code",
-        identifier: data.email,
-      })
-
-      if (firstFactor.status === "needs_first_factor") {
-        router.push("/signin/reset-password/confirm")
-        toast.message("Check your email", {
-          description: "We sent you a 6-digit verification code.",
-        })
-      }
+      // const firstFactor = await signIn.create({
+      //   strategy: "reset_password_email_code",
+      //   identifier: data.email,
+      // })
+      // if (firstFactor.status === "needs_first_factor") {
+      //   router.push("/signin/reset-password/confirm")
+      //   toast.message("Check your email", {
+      //     description: "We sent you a 6-digit verification code.",
+      //   })
+      // }
     } catch (err) {
       showErrorToast(err)
     } finally {

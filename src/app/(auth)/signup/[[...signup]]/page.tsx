@@ -13,7 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Shell } from "@/components/shell"
-import { OAuthSignIn } from "@/app/(auth)/_components/oauth-signin"
 import { SignUpForm } from "@/app/(auth)/_components/signup-form"
 
 export const metadata: Metadata = {
@@ -26,6 +25,7 @@ export default async function SignUpPage() {
   const result = await auth.api.getSession({
     headers: await headers(),
   })
+  console.log({ result })
   return (
     <Shell className="max-w-lg">
       <Card>
@@ -36,7 +36,6 @@ export default async function SignUpPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
-          <OAuthSignIn />
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />

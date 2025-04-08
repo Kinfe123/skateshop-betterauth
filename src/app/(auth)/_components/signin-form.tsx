@@ -2,12 +2,12 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { useSignIn } from "@clerk/nextjs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import type { z } from "zod"
 import { toast } from "sonner"
-import {  authClient } from "@/lib/auth-client"
+import type { z } from "zod"
+
+import { authClient } from "@/lib/auth-client"
 import { showErrorToast } from "@/lib/handle-error"
 import { authSchema } from "@/lib/validations/auth"
 import { Button } from "@/components/ui/button"
@@ -22,15 +22,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/icons"
 import { PasswordInput } from "@/components/password-input"
-import { authClient } from "@/lib/auth-client"
 
 type Inputs = z.infer<typeof authSchema>
 
 export function SignInForm() {
   const router = useRouter()
-  const { isLoaded, signIn, setActive } = useSignIn()
   const [loading, setLoading] = React.useState(false)
-  const [error , setError] = React.useState("")
+  const [error, setError] = React.useState("")
   // react-hook-form
   const form = useForm<Inputs>({
     resolver: zodResolver(authSchema),
@@ -42,7 +40,6 @@ export function SignInForm() {
 
   async function onSubmit(data: Inputs) {
     const { email, password } = data
-    if (!isLoaded) return
 
     setLoading(true)
 
@@ -75,8 +72,8 @@ export function SignInForm() {
             // redirect to the dashboard
             //alert("Logged in successfully");
             toast.message("Check your email", {
-                          description: "We sent you a 6-digit verification code.",
-                        })
+              description: "We sent you a 6-digit verification code.",
+            })
           },
           onError: (ctx) => {
             // display the error message
