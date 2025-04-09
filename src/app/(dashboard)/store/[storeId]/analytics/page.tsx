@@ -53,6 +53,8 @@ export default async function AnalyticsPage({
   params,
   searchParams,
 }: AnalyticsPageProps) {
+  const awaitedParams = await params
+  const awaitedSearchParams = await searchParams
   const storeId = decodeURIComponent(params.storeId)
 
   const { page, from, to } = searchParamsSchema

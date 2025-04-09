@@ -29,10 +29,11 @@ export default async function CustomersPage({
   params,
   searchParams,
 }: CustomersPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
-
+  const awaitedParams = await params
+  const storeId = decodeURIComponent(awaitedParams.storeId)
+  const awaitedSearchParams = await searchParams
   const { page, per_page, sort, email, from, to } =
-    customersSearchParamsSchema.parse(searchParams)
+    customersSearchParamsSchema.parse(awaitedSearchParams)
 
   const store = await db.query.stores.findFirst({
     where: eq(stores.id, storeId),

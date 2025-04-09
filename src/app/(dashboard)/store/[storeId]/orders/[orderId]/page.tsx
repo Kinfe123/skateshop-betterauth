@@ -30,8 +30,9 @@ interface OrderPageProps {
 }
 
 export default async function OrderPage({ params }: OrderPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
-  const orderId = decodeURIComponent(params.orderId)
+  const awaitedParams = await params
+  const storeId = decodeURIComponent(awaitedParams.storeId)
+  const orderId = decodeURIComponent(awaitedParams.orderId)
 
   const order = await db.query.orders.findFirst({
     where: and(eq(orders.id, orderId), eq(products.storeId, storeId)),

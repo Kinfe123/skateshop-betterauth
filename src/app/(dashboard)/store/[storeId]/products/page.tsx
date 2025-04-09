@@ -30,11 +30,13 @@ export default async function ProductsPage({
   params,
   searchParams,
 }: ProductsPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
+  const awaitedParams = await params
+  const awaitedSearchParams = await searchParams
+  const storeId = decodeURIComponent(awaitedParams.storeId)
 
   // Parse search params using zod schema
   const { page, per_page, sort, name, category, from, to } =
-    storesProductsSearchParamsSchema.parse(searchParams)
+    storesProductsSearchParamsSchema.parse(awaitedParams)
 
   const store = await db.query.stores.findFirst({
     where: eq(stores.id, storeId),

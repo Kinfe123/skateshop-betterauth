@@ -30,13 +30,15 @@ export default async function CustomerPage({
   params,
   searchParams,
 }: CustomerPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
+  const awaitedParams = await params
+  const storeId = decodeURIComponent(awaitedParams.storeId)
+  const awaitedSearchParams = await searchParams
   // Get email from the customer id
   const emailParts = params.customerId.split("-")
   const email = `${emailParts[0]}@${emailParts[2]}.com`
 
   const { page, per_page, sort, status, from, to } =
-    customerSearchParamsSchema.parse(searchParams)
+    customerSearchParamsSchema.parse(awaitedSearchParams)
 
   const store = await db.query.stores.findFirst({
     where: eq(stores.id, storeId),
