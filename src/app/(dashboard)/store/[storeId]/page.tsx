@@ -30,8 +30,10 @@ interface DashboardStorePageProps {
   }
 }
 
-async function getStoreFromParams(params: DashboardStorePageProps["params"]) {
-  const { storeId } = params
+async function getStoreFromParams(
+  params: Promise<DashboardStorePageProps["params"]>
+) {
+  const { storeId } = await params
 
   const store = await db.query.stores.findFirst({
     columns: {
@@ -49,8 +51,9 @@ async function getStoreFromParams(params: DashboardStorePageProps["params"]) {
 
 export async function generateMetadata({
   params,
-}: DashboardStorePageProps): Promise<Metadata> {
-  const store = await getStoreFromParams(params)
+}: Promise<DashboardStorePageProps>): Promise<Metadata> {
+  const awaitedParams = await params
+  const store = await getStoreFromParams(awaitedParams)
 
   if (!store) {
     return {}
@@ -67,8 +70,9 @@ export async function generateMetadata({
 export default async function DashboardStorePage({
   params,
 }: DashboardStorePageProps) {
-  const store = await getStoreFromParams(params)
-
+  const awaitedParams = await params
+  console.log({ awaitedParams })
+  const store = await getStoreFromParams(awaitedParams)
   if (!store) {
     notFound()
   }

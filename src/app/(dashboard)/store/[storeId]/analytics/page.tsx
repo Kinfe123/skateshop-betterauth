@@ -55,11 +55,12 @@ export default async function AnalyticsPage({
 }: AnalyticsPageProps) {
   const awaitedParams = await params
   const awaitedSearchParams = await searchParams
-  const storeId = decodeURIComponent(params.storeId)
+  console.log({ awaitedParams, awaitedSearchParams })
+  const storeId = decodeURIComponent(awaitedParams.storeId)
 
   const { page, from, to } = searchParamsSchema
     .omit({ per_page: true, sort: true })
-    .parse(searchParams)
+    .parse(awaitedSearchParams)
 
   const fromDay = from ? new Date(from) : undefined
   const toDay = to ? new Date(to) : undefined
