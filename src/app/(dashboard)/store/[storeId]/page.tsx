@@ -25,15 +25,13 @@ import { ConnectStoreToStripeButton } from "@/components/connect-store-to-stripe
 import { LoadingButton } from "@/components/loading-button"
 
 interface DashboardStorePageProps {
-  params: {
+  params: Promise<{
     storeId: string
-  }
+  }>
 }
 
-async function getStoreFromParams(
-  params: Promise<DashboardStorePageProps["params"]>
-) {
-  const { storeId } = await params
+async function getStoreFromParams(params: { storeId: string }) {
+  const { storeId } = params
 
   const store = await db.query.stores.findFirst({
     columns: {
@@ -51,9 +49,9 @@ async function getStoreFromParams(
 
 export async function generateMetadata({
   params,
-}: Promise<DashboardStorePageProps>): Promise<Metadata> {
-  const awaitedParams = await params
-  const store = await getStoreFromParams(awaitedParams)
+}: DashboardStorePageProps): Promise<Metadata> {
+  const { storeId } = await params
+  const store = await getStoreFromParams({ storeId })
 
   if (!store) {
     return {}
@@ -70,9 +68,8 @@ export async function generateMetadata({
 export default async function DashboardStorePage({
   params,
 }: DashboardStorePageProps) {
-  const awaitedParams = await params
-  console.log({ awaitedParams })
-  const store = await getStoreFromParams(awaitedParams)
+  const { storeId } = await params
+  const store = await getStoreFromParams({ storeId })
   if (!store) {
     notFound()
   }
