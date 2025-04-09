@@ -1,11 +1,13 @@
 import * as React from "react"
 import type { Metadata } from "next"
+import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { env } from "@/env.js"
 import { RocketIcon } from "@radix-ui/react-icons"
 
 import { getPlan, getPlans } from "@/lib/actions/stripe"
-import { getCachedUser, getUserUsageMetrics } from "@/lib/queries/user"
+import { auth } from "@/lib/auth"
+import { getUserUsageMetrics } from "@/lib/queries/user"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
   PageHeader,
@@ -24,8 +26,10 @@ export const metadata: Metadata = {
 }
 
 export default async function BillingPage() {
-  const user = await getCachedUser()
-
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+  const user = session.user
   if (!user) {
     redirect("/signin")
   }

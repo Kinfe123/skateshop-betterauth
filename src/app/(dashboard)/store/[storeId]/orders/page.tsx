@@ -30,10 +30,11 @@ export default async function OrdersPage({
   params,
   searchParams,
 }: OrdersPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
-
+  const awaitedPrams = await params
+  const awaitedSearchParams = await searchParams
+  const storeId = decodeURIComponent(awaitedPrams.storeId)
   const { page, per_page, sort, customer, status, from, to } =
-    ordersSearchParamsSchema.parse(searchParams)
+    ordersSearchParamsSchema.parse(awaitedSearchParams)
 
   const store = await db.query.stores.findFirst({
     where: eq(stores.id, storeId),
