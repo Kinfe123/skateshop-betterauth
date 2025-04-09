@@ -23,16 +23,18 @@ export const metadata: Metadata = {
 }
 
 interface OrderPageProps {
-  params: {
+  params: Promise<{
     storeId: string
     orderId: string
-  }
+  }>
 }
 
-export default async function OrderPage({ params }: OrderPageProps) {
-  const awaitedParams = await params
-  const storeId = decodeURIComponent(awaitedParams.storeId)
-  const orderId = decodeURIComponent(awaitedParams.orderId)
+export default async function OrderPage({
+  params,
+}: OrderPageProps) {
+  const { storeId: rawStoreId, orderId: rawOrderId } = await params
+  const storeId = decodeURIComponent(rawStoreId)
+  const orderId = decodeURIComponent(rawOrderId)
 
   const order = await db.query.orders.findFirst({
     where: and(eq(orders.id, orderId), eq(products.storeId, storeId)),

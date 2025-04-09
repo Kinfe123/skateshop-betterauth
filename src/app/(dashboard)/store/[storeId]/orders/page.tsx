@@ -20,9 +20,9 @@ export const metadata: Metadata = {
 }
 
 interface OrdersPageProps {
-  params: {
+  params: Promise<{
     storeId: string
-  }
+  }>
   searchParams: SearchParams
 }
 
@@ -30,9 +30,9 @@ export default async function OrdersPage({
   params,
   searchParams,
 }: OrdersPageProps) {
-  const awaitedPrams = await params
+  const { storeId: rawStoreId } = await params
+  const storeId = decodeURIComponent(rawStoreId)
   const awaitedSearchParams = await searchParams
-  const storeId = decodeURIComponent(awaitedPrams.storeId)
   const { page, per_page, sort, customer, status, from, to } =
     ordersSearchParamsSchema.parse(awaitedSearchParams)
 

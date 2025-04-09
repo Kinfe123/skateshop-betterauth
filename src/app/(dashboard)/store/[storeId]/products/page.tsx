@@ -20,9 +20,9 @@ export const metadata: Metadata = {
 }
 
 interface ProductsPageProps {
-  params: {
+  params: Promise<{
     storeId: string
-  }
+  }>
   searchParams: SearchParams
 }
 
@@ -30,13 +30,13 @@ export default async function ProductsPage({
   params,
   searchParams,
 }: ProductsPageProps) {
-  const awaitedParams = await params
+  const { storeId: rawStoreId } = await params
+  const storeId = decodeURIComponent(rawStoreId)
   const awaitedSearchParams = await searchParams
-  const storeId = decodeURIComponent(awaitedParams.storeId)
 
   // Parse search params using zod schema
   const { page, per_page, sort, name, category, from, to } =
-    storesProductsSearchParamsSchema.parse(awaitedParams)
+    storesProductsSearchParamsSchema.parse(awaitedSearchParams)
 
   const store = await db.query.stores.findFirst({
     where: eq(stores.id, storeId),

@@ -43,9 +43,9 @@ export const metadata: Metadata = {
 }
 
 interface AnalyticsPageProps {
-  params: {
+  params: Promise<{
     storeId: string
-  }
+  }>
   searchParams: SearchParams
 }
 
@@ -53,10 +53,10 @@ export default async function AnalyticsPage({
   params,
   searchParams,
 }: AnalyticsPageProps) {
-  const awaitedParams = await params
+  const { storeId: rawStoreId } = await params
+  const storeId = decodeURIComponent(rawStoreId)
   const awaitedSearchParams = await searchParams
-  console.log({ awaitedParams, awaitedSearchParams })
-  const storeId = decodeURIComponent(awaitedParams.storeId)
+  console.log({ storeId, awaitedSearchParams })
 
   const { page, from, to } = searchParamsSchema
     .omit({ per_page: true, sort: true })

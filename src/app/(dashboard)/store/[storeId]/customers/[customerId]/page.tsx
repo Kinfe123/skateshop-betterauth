@@ -19,10 +19,10 @@ export const metadata: Metadata = {
 }
 
 interface CustomerPageProps {
-  params: {
+  params: Promise<{
     storeId: string
     customerId: string
-  }
+  }>
   searchParams: SearchParams
 }
 
@@ -30,11 +30,11 @@ export default async function CustomerPage({
   params,
   searchParams,
 }: CustomerPageProps) {
-  const awaitedParams = await params
-  const storeId = decodeURIComponent(awaitedParams.storeId)
+  const { storeId: rawStoreId, customerId } = await params
+  const storeId = decodeURIComponent(rawStoreId)
   const awaitedSearchParams = await searchParams
   // Get email from the customer id
-  const emailParts = params.customerId.split("-")
+  const emailParts = customerId.split("-")
   const email = `${emailParts[0]}@${emailParts[2]}.com`
 
   const { page, per_page, sort, status, from, to } =

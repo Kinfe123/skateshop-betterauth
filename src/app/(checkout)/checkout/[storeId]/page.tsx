@@ -26,13 +26,16 @@ export const metadata: Metadata = {
 }
 
 interface CheckoutPageProps {
-  params: {
+  params: Promise<{
     storeId: string
-  }
+  }>
 }
 
-export default async function CheckoutPage({ params }: CheckoutPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
+export default async function CheckoutPage({
+  params,
+}: CheckoutPageProps) {
+  const { storeId: rawStoreId } = await params
+  const storeId = decodeURIComponent(rawStoreId)
 
   const store = await db
     .select({

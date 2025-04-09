@@ -29,17 +29,18 @@ export const metadata: Metadata = {
 }
 
 interface PurchasePageProps {
-  params: {
+  params: Promise<{
     purchaseId: string
-  }
+  }>
 }
 
-export default async function PurchasePage({ params }: PurchasePageProps) {
-  // Using the purchaseId as the orderId in the sql query
-  const orderId = decodeURIComponent(params.purchaseId)
+export default async function PurchasePage({
+  params,
+}: PurchasePageProps) {
+  const { purchaseId } = await params
 
   const order = await db.query.orders.findFirst({
-    where: and(eq(orders.id, orderId), eq(orders.id, orderId)),
+    where: and(eq(orders.id, purchaseId), eq(orders.id, purchaseId)),
   })
 
   if (!order) {
@@ -69,7 +70,7 @@ export default async function PurchasePage({ params }: PurchasePageProps) {
       <Card>
         <CardHeader className="space-y-1">
           <CardTitle as="h2" className="text-2xl">
-            Order {formatId(orderId)}
+            Order {formatId(purchaseId)}
           </CardTitle>
           <CardDescription>{store?.name ?? "Unknown store"}</CardDescription>
         </CardHeader>

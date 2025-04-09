@@ -24,9 +24,9 @@ export const metadata: Metadata = {
 }
 
 interface OrderSuccessPageProps {
-  params: {
+  params: Promise<{
     storeId: string
-  }
+  }>
   searchParams: {
     [key: string]: string | string[] | undefined
   }
@@ -36,7 +36,8 @@ export default async function OrderSuccessPage({
   params,
   searchParams,
 }: OrderSuccessPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
+  const { storeId: rawStoreId } = await params
+  const storeId = decodeURIComponent(rawStoreId)
   const {
     payment_intent,
     payment_intent_client_secret,

@@ -21,13 +21,16 @@ export const metadata: Metadata = {
 }
 
 interface NewProductPageProps {
-  params: {
+  params: Promise<{
     storeId: string
-  }
+  }>
 }
 
-export default async function NewProductPage({ params }: NewProductPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
+export default async function NewProductPage({
+  params,
+}: NewProductPageProps) {
+  const { storeId: rawStoreId } = await params
+  const storeId = decodeURIComponent(rawStoreId)
 
   const user = await getCachedUser()
 
