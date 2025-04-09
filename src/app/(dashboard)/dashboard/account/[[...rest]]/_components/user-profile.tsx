@@ -24,33 +24,31 @@ export function UserProfile({ session }: { session: Session }) {
   return (
     <div>
       <div className="min-h-screen bg-black p-6 text-white md:p-10">
-        <div className="mr-auto max-w-3xl space-y-8">
+        <div className="mr-auto max-w-full space-y-8">
           {/* Profile Section */}
           <section>
             <h2 className="mb-6 text-xl font-medium">Profile</h2>
             <div className="mb-2 flex items-center gap-4">
               <Avatar className="h-20 w-20 border-2 border-neutral-700">
-                <AvatarImage
-                  src="/placeholder.svg?height=80&width=80"
-                  alt="Profile picture"
-                />
+                <AvatarImage src={session.user.image} alt="Profile picture" />
                 <AvatarFallback className="bg-neutral-800">KF</AvatarFallback>
               </Avatar>
               <div>
-                <h3 className="text-xl font-bold tracking-wide">KINFISH</h3>
+                <h3 className="text-xl font-bold tracking-wide">
+                  {session.user.name}
+                </h3>
               </div>
             </div>
           </section>
 
           <Separator className="bg-neutral-800" />
 
-          {/* Email Addresses Section */}
           <section>
             <h2 className="mb-6 text-xl font-medium">Email addresses</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between py-2">
                 <div className="flex items-center gap-2">
-                  <span>kinfetare83@gmail.com</span>
+                  <span>{session.user.email}</span>
                   <Badge className="bg-blue-600 text-xs font-normal hover:bg-blue-700">
                     Primary
                   </Badge>
@@ -76,7 +74,6 @@ export function UserProfile({ session }: { session: Session }) {
 
           <Separator className="bg-neutral-800" />
 
-          {/* Connected Accounts Section */}
           <section>
             <h2 className="mb-6 text-xl font-medium">Connected accounts</h2>
             <div className="space-y-4">
@@ -104,7 +101,7 @@ export function UserProfile({ session }: { session: Session }) {
                     </svg>
                   </div>
                   <div>
-                    <span>Google (kinfetare83@gmail.com)</span>
+                    <span>Google ({session.user.email})</span>
                     <Badge className="ml-2 bg-red-500/90 text-xs font-normal hover:bg-red-500">
                       Requires action
                     </Badge>
@@ -194,7 +191,6 @@ export function UserProfile({ session }: { session: Session }) {
 
           <Separator className="bg-neutral-800" />
 
-          {/* Danger Zone */}
           <section>
             <h2 className="mb-6 text-xl font-medium text-red-500">Danger</h2>
             <div className="flex items-center justify-between py-2">
@@ -211,9 +207,6 @@ export function UserProfile({ session }: { session: Session }) {
           </section>
         </div>
       </div>
-
-      <p>Hello World</p>
-      <small>hello@gmail.com</small>
     </div>
   )
 }
