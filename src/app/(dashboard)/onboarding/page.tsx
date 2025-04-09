@@ -8,19 +8,20 @@ import { GridPattern } from "@/components/grid-pattern"
 import { Shell } from "@/components/shell"
 
 import { Onboarding } from "./_components/onboarding"
+import { getUserSession } from "@/lib/auth"
 
 export const metadata: Metadata = {
   title: "Onboarding",
   description: "Get started with your new store",
 }
 
-export default function OnboardingPage() {
-  const { userId } = auth()
-
+export default async function OnboardingPage() {
+  const user = await getUserSession()
+  const userId = user?.user.id
+  console.log({ user })
   if (!userId) {
     redirect("/signin")
   }
-
   return (
     <Shell className="h-[calc(100vh-4rem)] max-w-screen-sm">
       <GridPattern

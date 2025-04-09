@@ -23,6 +23,7 @@ export default async function AccountPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
+  console.log({ session })
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <PageHeader>

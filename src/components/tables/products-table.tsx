@@ -29,7 +29,9 @@ import { DataTableColumnHeader } from "@/components/data-table/data-table-column
 type AwaitedProduct = Pick<
   Product,
   "id" | "name" | "categoryId" | "price" | "inventory" | "rating" | "createdAt"
->
+> & {
+  category: string | null
+}
 
 interface ProductsTableProps {
   promise: Promise<{

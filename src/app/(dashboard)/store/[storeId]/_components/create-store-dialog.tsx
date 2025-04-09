@@ -60,7 +60,7 @@ export function CreateStoreDialog({
   const router = useRouter()
   const [isCreatePending, startCreateTransaction] = React.useTransition()
   const isDesktop = useMediaQuery("(min-width: 640px)")
-
+  console.log({ userId })
   const planMetrics = React.use(planMetricsPromise)
   const rateLimitExceeded =
     planMetrics.storeLimitExceeded || planMetrics.productLimitExceeded

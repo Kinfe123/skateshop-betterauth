@@ -3,6 +3,7 @@ import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { nextCookies } from "better-auth/next-js"
 import { apiKey } from "better-auth/plugins"
+import { headers } from "next/headers"
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -17,6 +18,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  logger: {},
   user: {
     modelName: "user",
     additionalFields: {
@@ -43,3 +45,9 @@ export const auth = betterAuth({
     },
   },
 })
+export const getUserSession = async () => {
+const result = await  auth.api.getSession({
+  headers: await headers()
+})
+return result
+} 

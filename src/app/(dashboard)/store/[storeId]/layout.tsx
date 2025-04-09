@@ -2,7 +2,7 @@ import * as React from "react"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
-import { auth } from "@/lib/auth"
+import { auth, getUserSession } from "@/lib/auth"
 import { getStoresByUserId } from "@/lib/queries/store"
 import { getUserPlanMetrics } from "@/lib/queries/user"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -25,13 +25,12 @@ export default async function DashboardStoreLayout({
   params,
 }: DashboardStoreLayoutProps) {
   const storeId = decodeURIComponent(params.storeId)
-
-  const session = await auth.api.getSession({ headers: await headers() })
-  const user = session.user
-  if (!user) {
+  const sessionResult = await getUserSession()
+  if (!sessionResult) {
     redirect("/signin")
-  }
-
+  } 
+  const user = sessionResult.user
+  console.log({user}) 
   const storesPromise = getStoresByUserId({ userId: user.id })
   const planMetricsPromise = getUserPlanMetrics({ userId: user.id })
 

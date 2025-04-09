@@ -31,17 +31,17 @@ export default async function DashboardLayout({
           className="top-0 z-30 hidden flex-col gap-4 border-r border-border/60 lg:sticky lg:block"
         >
           <StoreSwitcher
-            userId={user.id}
+            userId={user.user.id}
             storesPromise={storesPromise}
             planMetricsPromise={planMetricsPromise}
           />
         </DashboardSidebar>
         <div className="flex flex-col">
-          <DashboardHeader user={user} storeId="storeId">
+          <DashboardHeader user={user.user} storeId="storeId">
             <DashboardSidebarSheet className="lg:hidden">
               <DashboardSidebar storeId="storeId">
                 <StoreSwitcher
-                  userId={user.id}
+                  userId={user.user.id}
                   storesPromise={storesPromise}
                   planMetricsPromise={planMetricsPromise}
                 />

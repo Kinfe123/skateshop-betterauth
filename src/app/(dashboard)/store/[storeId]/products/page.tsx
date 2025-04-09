@@ -1,14 +1,17 @@
 import * as React from "react"
 import { type Metadata } from "next"
 import { unstable_noStore as noStore } from "next/cache"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
+import { headers } from "next/headers"
 import { db } from "@/db"
 import { categories, products, stores, type Product } from "@/db/schema"
 import { env } from "@/env.js"
 import type { SearchParams } from "@/types"
 import { and, asc, desc, eq, gte, inArray, like, lte, sql } from "drizzle-orm"
 
+import { auth } from "@/lib/auth"
 import { storesProductsSearchParamsSchema } from "@/lib/validations/params"
+import { getCategories } from "@/lib/queries/product"
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
 import { DateRangePicker } from "@/components/date-range-picker"
 import { ProductsTable } from "@/components/tables/products-table"
@@ -30,6 +33,14 @@ export default async function ProductsPage({
   params,
   searchParams,
 }: ProductsPageProps) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session?.user) {
+    redirect("/signin")
+  }
+
   const { storeId: rawStoreId } = await params
   const storeId = decodeURIComponent(rawStoreId)
   const awaitedSearchParams = await searchParams
@@ -39,7 +50,10 @@ export default async function ProductsPage({
     storesProductsSearchParamsSchema.parse(awaitedSearchParams)
 
   const store = await db.query.stores.findFirst({
-    where: eq(stores.id, storeId),
+    where: and(
+      eq(stores.id, storeId),
+      eq(stores.userId, session.user.id)
+    ),
     columns: {
       id: true,
       name: true,
@@ -49,6 +63,9 @@ export default async function ProductsPage({
   if (!store) {
     notFound()
   }
+
+  // Get categories for the table
+  const categoriesPromise = getCategories()
 
   // Fallback page for invalid page numbers
   const fallbackPage = isNaN(page) || page < 1 ? 1 : page
@@ -76,6 +93,7 @@ export default async function ProductsPage({
           id: products.id,
           name: products.name,
           category: categories.name,
+          categoryId: products.categoryId,
           price: products.price,
           inventory: products.inventory,
           rating: products.rating,
@@ -157,9 +175,13 @@ export default async function ProductsPage({
         <h2 className="text-2xl font-bold tracking-tight">Products</h2>
         <DateRangePicker align="end" />
       </div>
-      {/* <React.Suspense fallback={<DataTableSkeleton columnCount={6} />}>
-        <ProductsTable promise={productsPromise} storeId={storeId} />
-      </React.Suspense> */}
+       <React.Suspense fallback={<DataTableSkeleton columnCount={6} />}>
+        <ProductsTable 
+          promise={productsPromise} 
+          categoriesPromise={categoriesPromise}
+          storeId={storeId} 
+        />
+      </React.Suspense> 
     </div>
   )
 }
