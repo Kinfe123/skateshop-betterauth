@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
+import { headers } from "next/headers"
 import { env } from "@/env.js"
 
+import { auth } from "@/lib/auth"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import {
   PageHeader,
@@ -17,7 +19,10 @@ export const metadata: Metadata = {
   description: "Manage your account settings",
 }
 
-export default function AccountPage() {
+export default async function AccountPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <PageHeader>
@@ -27,7 +32,7 @@ export default function AccountPage() {
         </PageHeaderDescription>
       </PageHeader>
       <ScrollArea className="w-full pb-3.5">
-        <UserProfile />
+        <UserProfile session={session} />
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </Shell>
