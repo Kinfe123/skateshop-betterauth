@@ -5,8 +5,6 @@ import type { SearchParams } from "@/types"
 import { z } from "zod"
 
 import { getNotification } from "@/lib/queries/notification"
-import { getCachedUser } from "@/lib/queries/user"
-import { getUserEmail } from "@/lib/utils"
 import {
   Card,
   CardContent,
@@ -23,6 +21,7 @@ import { Shell } from "@/components/shell"
 
 import { UpdateNotificationForm } from "./_components/update-notification-form"
 import { UpdateNotificationFormSkeleton } from "./_components/update-notification-form-skeleton"
+import { getUserSession } from "@/lib/auth"
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
@@ -41,13 +40,13 @@ const schema = z.object({
 export default async function SettingsPage({
   searchParams,
 }: SettingsPageProps) {
-  const { token } = schema.parse(searchParams)
+  const awaitedSearchParams = await searchParams
+  const { token } = schema.parse(awaitedSearchParams)
 
-  const user = await getCachedUser()
-
+  const user = await getUserSession()!
   const notificationPromise = getNotification({
     token,
-    email: getUserEmail(user),
+    email: user?.user.email,
   })
 
   return (

@@ -19,9 +19,9 @@ export const metadata: Metadata = {
 }
 
 interface CustomersPageProps {
-  params: {
+  params: Promise<{
     storeId: string
-  }
+  }>,
   searchParams: SearchParams
 }
 
