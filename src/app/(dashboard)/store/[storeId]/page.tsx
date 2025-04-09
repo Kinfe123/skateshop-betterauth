@@ -51,6 +51,7 @@ export async function generateMetadata({
   params,
 }: DashboardStorePageProps): Promise<Metadata> {
   const { storeId } = await params
+  console.log({ storeId })
   const store = await getStoreFromParams({ storeId })
 
   if (!store) {
@@ -69,6 +70,7 @@ export default async function DashboardStorePage({
   params,
 }: DashboardStorePageProps) {
   const { storeId } = await params
+  console.log({ storeId })
   const store = await getStoreFromParams({ storeId })
   if (!store) {
     notFound()
