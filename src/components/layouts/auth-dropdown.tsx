@@ -1,6 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
-import type { User } from "@clerk/nextjs/server"
+import type { User } from "better-auth"
 import { DashboardIcon, ExitIcon, GearIcon } from "@radix-ui/react-icons"
 
 import { getStoreByUserId } from "@/lib/queries/store"
@@ -42,10 +42,9 @@ export async function AuthDropdown({
     )
   }
 
-  const initials = `${user.firstName?.charAt(0) ?? ""} ${
-    user.lastName?.charAt(0) ?? ""
+  const initials = `${user.name?.charAt(0) ?? ""} ${
+    user.name.charAt(0) ?? ""
   }`
-  const email = getUserEmail(user)
 
   const storePromise = getStoreByUserId({ userId: user.id })
 
@@ -58,7 +57,7 @@ export async function AuthDropdown({
           {...props}
         >
           <Avatar className="size-8">
-            <AvatarImage src={user.imageUrl} alt={user.username ?? ""} />
+            <AvatarImage src={user.image ?? ""} alt={user.name ?? ""} />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
@@ -67,10 +66,10 @@ export async function AuthDropdown({
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {user.firstName} {user.lastName}
+              {user.name}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {email}
+              {user.email}
             </p>
           </div>
         </DropdownMenuLabel>

@@ -1,5 +1,4 @@
-import type { User } from "@clerk/nextjs/server"
-
+import type  { User } from "better-auth"
 import { siteConfig } from "@/config/site"
 import { CartSheet } from "@/components/checkout/cart-sheet"
 import { AuthDropdown } from "@/components/layouts/auth-dropdown"
@@ -11,7 +10,7 @@ interface SiteHeaderProps {
   user: User | null
 }
 
-export function SiteHeader({ user }: SiteHeaderProps) {
+export function SiteHeader({ user }: {user: User | null}) {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="container flex h-16 items-center">

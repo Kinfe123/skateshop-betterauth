@@ -15,7 +15,7 @@ export default async function LobyLayout({ children, modal }: LobyLayoutProps) {
   })
   return (
     <div className="relative flex min-h-screen flex-col">
-      <SiteHeader user={null} />
+      <SiteHeader user={user?.user} />
       <main className="flex-1">
         {children}
         {modal}
