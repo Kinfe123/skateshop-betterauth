@@ -1,6 +1,8 @@
 import { headers } from "next/headers"
+import { getSessionCookie } from "better-auth/cookies"
 
 import { auth } from "@/lib/auth"
+import { authClient } from "@/lib/auth-client"
 import { SiteFooter } from "@/components/layouts/site-footer"
 import { SiteHeader } from "@/components/layouts/site-header"
 
@@ -10,6 +12,8 @@ interface LobyLayoutProps
   }> {}
 
 export default async function LobyLayout({ children, modal }: LobyLayoutProps) {
+  const header = await headers()
+  const cookie = header.get("cookie")
   const user = await auth.api.getSession({
     headers: await headers(),
   })
